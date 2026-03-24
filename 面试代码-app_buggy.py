@@ -200,9 +200,9 @@ def get_summary():
             summary['total_quantity'] += row['quantity']
             summary['total_completed'] += row['completed']
 
-        if summary['total_orders'] > 0:
+        if summary['total_quantity'] > 0:
             summary['overall_progress'] = round(
-                summary['total_completed'] / summary['total_orders'] * 100, 1
+                summary['total_completed'] / summary['total_quantity'] * 100, 1
             )
 
         return jsonify({"success": True, "data": summary})
@@ -307,7 +307,7 @@ def index():
                 <td>${o.completed}</td>
                 <td>
                     <div class="progress-bar-wrap">
-                        <div class="progress-bar" style="width: " + o.progress + "%"></div>
+                        <div class="progress-bar" style="width: ${o.progress}%"></div>
                     </div>
                     <span style="margin-left:6px">${o.progress}%</span>
                 </td>
