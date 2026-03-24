@@ -131,7 +131,8 @@ def update_progress(order_id):
       - completed 大于 0 且小于 quantity 时 status 为 'in_progress'
     """
     data = request.get_json()
-
+    if not data or not isinstance(data, dict):
+        return jsonify({"success": False, "error": "请求体必须为 JSON 格式"}), 400
     new_completed = data.get('completed')
     if new_completed is None:
         return jsonify({"success": False, "error": "缺少 completed 字段"}), 400
