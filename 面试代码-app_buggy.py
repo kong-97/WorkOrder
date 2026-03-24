@@ -132,7 +132,9 @@ def update_progress(order_id):
     """
     data = request.get_json()
 
-    new_completed = data['completed']
+    new_completed = data.get('completed')
+    if new_completed is None:
+        return jsonify({"success": False, "error": "缺少 completed 字段"}), 400
 
     if not isinstance(new_completed, int) or new_completed < 0:
         return jsonify({"success": False, "error": "completed 必须为非负整数"}), 400
