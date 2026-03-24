@@ -59,6 +59,8 @@ def get_db_connection():
 
 def calculate_progress(completed, quantity):
     """计算完成进度百分比"""
+    if quantity == 0:
+        return 0.0
     return round(completed / quantity * 100, 1)
 
 
@@ -70,7 +72,7 @@ def format_order(row):
         "product_name": row["product_name"],
         "quantity": row["quantity"],
         "completed": row["completed"],
-        "progress": calculate_progress(row["quantity"], row["completed"]),
+        "progress": calculate_progress(row["completed"], row["quantity"]),
         "status": row["status"],
         "created_at": row["created_at"],
         "updated_at": row["updated_at"],
@@ -90,7 +92,7 @@ def get_orders():
     try:
         if status_filter:
             rows = conn.execute(
-                f"SELECT * FROM work_orders WHERE status = {status_filter}"
+                "SELECT * FROM work_orders WHERE status = ?", (status_filter,)
             ).fetchall()
         else:
             rows = conn.execute("SELECT * FROM work_orders").fetchall()
